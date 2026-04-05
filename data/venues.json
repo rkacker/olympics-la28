@@ -1,0 +1,452 @@
+{
+  "2028 Stadium": {
+    "local_name": "SoFi Stadium",
+    "lat": 33.9535,
+    "lng": -118.3392,
+    "zone": "Inglewood",
+    "city": "Inglewood",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Alamitos Beach Stadium": {
+    "local_name": null,
+    "lat": 33.7580,
+    "lng": -118.1870,
+    "zone": "Long Beach",
+    "city": "Long Beach",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Belmont Shore": {
+    "local_name": null,
+    "lat": 33.7530,
+    "lng": -118.1450,
+    "zone": "Long Beach",
+    "city": "Long Beach",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Carson Center Court": {
+    "local_name": "Dignity Health Sports Park - Tennis",
+    "lat": 33.8644,
+    "lng": -118.2611,
+    "zone": "Carson",
+    "city": "Carson",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Carson Court 1": {
+    "local_name": "Dignity Health Sports Park - Tennis",
+    "lat": 33.8644,
+    "lng": -118.2611,
+    "zone": "Carson",
+    "city": "Carson",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Carson Court 2": {
+    "local_name": "Dignity Health Sports Park - Tennis",
+    "lat": 33.8644,
+    "lng": -118.2611,
+    "zone": "Carson",
+    "city": "Carson",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Carson Courts 3-11": {
+    "local_name": "Dignity Health Sports Park - Tennis",
+    "lat": 33.8644,
+    "lng": -118.2611,
+    "zone": "Carson",
+    "city": "Carson",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Carson Field": {
+    "local_name": "Dignity Health Sports Park",
+    "lat": 33.8644,
+    "lng": -118.2611,
+    "zone": "Carson",
+    "city": "Carson",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Carson Stadium": {
+    "local_name": "Dignity Health Sports Park",
+    "lat": 33.8644,
+    "lng": -118.2611,
+    "zone": "Carson",
+    "city": "Carson",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Carson Velodrome": {
+    "local_name": "VELO Sports Center",
+    "lat": 33.8655,
+    "lng": -118.2580,
+    "zone": "Carson",
+    "city": "Carson",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Columbus Stadium": {
+    "local_name": "Lower.com Field",
+    "lat": 39.9689,
+    "lng": -83.0170,
+    "zone": "Columbus",
+    "city": "Columbus",
+    "state": "OH",
+    "is_la_area": false
+  },
+  "Comcast Squash Center at Universal Studios": {
+    "local_name": null,
+    "lat": 34.1381,
+    "lng": -118.3534,
+    "zone": "Universal City",
+    "city": "Universal City",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "DTLA Arena": {
+    "local_name": "Crypto.com Arena",
+    "lat": 34.0430,
+    "lng": -118.2673,
+    "zone": "DTLA",
+    "city": "Los Angeles",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Dodger Stadium": {
+    "local_name": null,
+    "lat": 34.0739,
+    "lng": -118.2400,
+    "zone": "DTLA",
+    "city": "Los Angeles",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Exposition Park Stadium": {
+    "local_name": "BMO Stadium",
+    "lat": 34.0128,
+    "lng": -118.2841,
+    "zone": "Exposition Park",
+    "city": "Los Angeles",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Fairgrounds Cricket Stadium": {
+    "local_name": "LA County Fairgrounds",
+    "lat": 34.0868,
+    "lng": -117.7514,
+    "zone": "Pomona",
+    "city": "Pomona",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Galen Center": {
+    "local_name": "USC Galen Center",
+    "lat": 34.0224,
+    "lng": -118.2879,
+    "zone": "Exposition Park",
+    "city": "Los Angeles",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Honda Center": {
+    "local_name": null,
+    "lat": 33.8078,
+    "lng": -117.8765,
+    "zone": "Anaheim",
+    "city": "Anaheim",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Industry Hills MTB Course": {
+    "local_name": "Industry Hills Expo Center",
+    "lat": 33.9925,
+    "lng": -117.9277,
+    "zone": "City of Industry",
+    "city": "City of Industry",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Intuit Dome": {
+    "local_name": null,
+    "lat": 33.9475,
+    "lng": -118.3418,
+    "zone": "Inglewood",
+    "city": "Inglewood",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "LA Convention Center Hall 1": {
+    "local_name": "LA Convention Center",
+    "lat": 34.0404,
+    "lng": -118.2696,
+    "zone": "DTLA",
+    "city": "Los Angeles",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "LA Convention Center Hall 2": {
+    "local_name": "LA Convention Center",
+    "lat": 34.0404,
+    "lng": -118.2696,
+    "zone": "DTLA",
+    "city": "Los Angeles",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "LA Convention Center Hall 3": {
+    "local_name": "LA Convention Center",
+    "lat": 34.0404,
+    "lng": -118.2696,
+    "zone": "DTLA",
+    "city": "Los Angeles",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "LA Memorial Coliseum": {
+    "local_name": null,
+    "lat": 34.0141,
+    "lng": -118.2879,
+    "zone": "Exposition Park",
+    "city": "Los Angeles",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Long Beach Aquatics Center": {
+    "local_name": null,
+    "lat": 33.7610,
+    "lng": -118.1880,
+    "zone": "Long Beach",
+    "city": "Long Beach",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Long Beach Arena": {
+    "local_name": "Long Beach Convention & Entertainment Center",
+    "lat": 33.7615,
+    "lng": -118.1885,
+    "zone": "Long Beach",
+    "city": "Long Beach",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Long Beach Climbing Theater": {
+    "local_name": null,
+    "lat": 33.7600,
+    "lng": -118.1870,
+    "zone": "Long Beach",
+    "city": "Long Beach",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Long Beach Target Shooting Hall": {
+    "local_name": null,
+    "lat": 33.7605,
+    "lng": -118.1875,
+    "zone": "Long Beach",
+    "city": "Long Beach",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Marine Stadium": {
+    "local_name": "Long Beach Marine Stadium",
+    "lat": 33.7629,
+    "lng": -118.1281,
+    "zone": "Long Beach",
+    "city": "Long Beach",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Nashville Stadium": {
+    "local_name": "GEODIS Park",
+    "lat": 36.1304,
+    "lng": -86.7654,
+    "zone": "Nashville",
+    "city": "Nashville",
+    "state": "TN",
+    "is_la_area": false
+  },
+  "New York Stadium": {
+    "local_name": "MetLife Stadium",
+    "lat": 40.8128,
+    "lng": -74.0742,
+    "zone": "New York",
+    "city": "East Rutherford",
+    "state": "NJ",
+    "is_la_area": false
+  },
+  "OKC Softball Park": {
+    "local_name": "USA Softball Hall of Fame Complex",
+    "lat": 35.4001,
+    "lng": -97.4863,
+    "zone": "OKC",
+    "city": "Oklahoma City",
+    "state": "OK",
+    "is_la_area": false
+  },
+  "OKC Whitewater Center": {
+    "local_name": "Riversport Rapids",
+    "lat": 35.4419,
+    "lng": -97.5051,
+    "zone": "OKC",
+    "city": "Oklahoma City",
+    "state": "OK",
+    "is_la_area": false
+  },
+  "Peacock Theater": {
+    "local_name": "Peacock Theater at L.A. Live",
+    "lat": 34.0447,
+    "lng": -118.2660,
+    "zone": "DTLA",
+    "city": "Los Angeles",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Port of Los Angeles": {
+    "local_name": null,
+    "lat": 33.7361,
+    "lng": -118.2739,
+    "zone": "Port of Los Angeles",
+    "city": "San Pedro",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Riviera Country Club": {
+    "local_name": null,
+    "lat": 34.0502,
+    "lng": -118.5003,
+    "zone": "Riviera",
+    "city": "Pacific Palisades",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Rose Bowl Aquatics Center": {
+    "local_name": null,
+    "lat": 34.1613,
+    "lng": -118.1676,
+    "zone": "Pasadena",
+    "city": "Pasadena",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Rose Bowl Stadium": {
+    "local_name": "Rose Bowl",
+    "lat": 34.1613,
+    "lng": -118.1676,
+    "zone": "Pasadena",
+    "city": "Pasadena",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "San Diego Stadium": {
+    "local_name": "Snapdragon Stadium",
+    "lat": 32.7831,
+    "lng": -117.1196,
+    "zone": "San Diego",
+    "city": "San Diego",
+    "state": "CA",
+    "is_la_area": false
+  },
+  "San Jos\u00e9 Stadium": {
+    "local_name": "PayPal Park",
+    "lat": 37.3517,
+    "lng": -121.9253,
+    "zone": "San Jos\u00e9",
+    "city": "San Jos\u00e9",
+    "state": "CA",
+    "is_la_area": false
+  },
+  "Santa Anita Park": {
+    "local_name": null,
+    "lat": 34.1389,
+    "lng": -118.0431,
+    "zone": "Arcadia",
+    "city": "Arcadia",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "St. Louis Stadium": {
+    "local_name": "CITYPARK",
+    "lat": 38.6324,
+    "lng": -90.2110,
+    "zone": "St. Louis",
+    "city": "St. Louis",
+    "state": "MO",
+    "is_la_area": false
+  },
+  "Trestles State Beach": {
+    "local_name": "Trestles",
+    "lat": 33.3822,
+    "lng": -117.5886,
+    "zone": "Trestles Beach",
+    "city": "San Clemente",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Valley Complex 1": {
+    "local_name": "Sepulveda Basin",
+    "lat": 34.1728,
+    "lng": -118.4762,
+    "zone": "Valley",
+    "city": "Encino",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Valley Complex 2": {
+    "local_name": "Sepulveda Basin",
+    "lat": 34.1740,
+    "lng": -118.4750,
+    "zone": "Valley",
+    "city": "Encino",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Valley Complex 3": {
+    "local_name": "Sepulveda Basin",
+    "lat": 34.1752,
+    "lng": -118.4738,
+    "zone": "Valley",
+    "city": "Encino",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Valley Complex 4": {
+    "local_name": "Sepulveda Basin",
+    "lat": 34.1764,
+    "lng": -118.4726,
+    "zone": "Valley",
+    "city": "Encino",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Venice Beach": {
+    "local_name": null,
+    "lat": 33.9850,
+    "lng": -118.4695,
+    "zone": "Venice",
+    "city": "Los Angeles",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Venice Beach Boardwalk - Start": {
+    "local_name": "Venice Beach Boardwalk",
+    "lat": 33.9850,
+    "lng": -118.4695,
+    "zone": "Venice",
+    "city": "Los Angeles",
+    "state": "CA",
+    "is_la_area": true
+  },
+  "Whittier Narrows Clay Shooting Center": {
+    "local_name": null,
+    "lat": 34.0292,
+    "lng": -118.0511,
+    "zone": "Whittier Narrows",
+    "city": "South El Monte",
+    "state": "CA",
+    "is_la_area": true
+  }
+}

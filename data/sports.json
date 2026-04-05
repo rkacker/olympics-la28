@@ -1,0 +1,292 @@
+[
+  {
+    "sport": "3x3 Basketball",
+    "category": "Ball Sports",
+    "session_count": 20
+  },
+  {
+    "sport": "Archery",
+    "category": "Shooting & Archery",
+    "session_count": 17
+  },
+  {
+    "sport": "Artistic Gymnastics",
+    "category": "Gymnastics",
+    "session_count": 15
+  },
+  {
+    "sport": "Artistic Swimming",
+    "category": "Aquatics",
+    "session_count": 5
+  },
+  {
+    "sport": "Athletics (Marathon)",
+    "category": "Athletics",
+    "session_count": 2
+  },
+  {
+    "sport": "Athletics (Race Walk)",
+    "category": "Athletics",
+    "session_count": 1
+  },
+  {
+    "sport": "Athletics (Track & Field)",
+    "category": "Athletics",
+    "session_count": 17
+  },
+  {
+    "sport": "BMX Freestyle",
+    "category": "Cycling",
+    "session_count": 2
+  },
+  {
+    "sport": "BMX Racing",
+    "category": "Cycling",
+    "session_count": 2
+  },
+  {
+    "sport": "Badminton",
+    "category": "Racquet Sports",
+    "session_count": 26
+  },
+  {
+    "sport": "Baseball",
+    "category": "Ball Sports",
+    "session_count": 12
+  },
+  {
+    "sport": "Basketball",
+    "category": "Ball Sports",
+    "session_count": 43
+  },
+  {
+    "sport": "Beach Volleyball",
+    "category": "Ball Sports",
+    "session_count": 39
+  },
+  {
+    "sport": "Boxing - Final Stages",
+    "category": "Combat Sports",
+    "session_count": 7
+  },
+  {
+    "sport": "Boxing - Preliminary Stages",
+    "category": "Combat Sports",
+    "session_count": 17
+  },
+  {
+    "sport": "Canoe Slalom",
+    "category": "Water Sports",
+    "session_count": 9
+  },
+  {
+    "sport": "Canoe Sprint",
+    "category": "Water Sports",
+    "session_count": 5
+  },
+  {
+    "sport": "Climbing",
+    "category": "Other",
+    "session_count": 10
+  },
+  {
+    "sport": "Cricket",
+    "category": "Ball Sports",
+    "session_count": 28
+  },
+  {
+    "sport": "Cycling Road (Road Race)",
+    "category": "Cycling",
+    "session_count": 2
+  },
+  {
+    "sport": "Cycling Road (Time Trial)",
+    "category": "Cycling",
+    "session_count": 1
+  },
+  {
+    "sport": "Cycling Track",
+    "category": "Cycling",
+    "session_count": 9
+  },
+  {
+    "sport": "Diving",
+    "category": "Aquatics",
+    "session_count": 16
+  },
+  {
+    "sport": "Equestrian",
+    "category": "Other",
+    "session_count": 16
+  },
+  {
+    "sport": "Fencing",
+    "category": "Combat Sports",
+    "session_count": 18
+  },
+  {
+    "sport": "Flag Football",
+    "category": "Ball Sports",
+    "session_count": 14
+  },
+  {
+    "sport": "Football (Soccer)",
+    "category": "Ball Sports",
+    "session_count": 58
+  },
+  {
+    "sport": "Golf",
+    "category": "Other",
+    "session_count": 10
+  },
+  {
+    "sport": "Handball",
+    "category": "Ball Sports",
+    "session_count": 46
+  },
+  {
+    "sport": "Hockey",
+    "category": "Ball Sports",
+    "session_count": 34
+  },
+  {
+    "sport": "Judo",
+    "category": "Combat Sports",
+    "session_count": 16
+  },
+  {
+    "sport": "Lacrosse",
+    "category": "Ball Sports",
+    "session_count": 12
+  },
+  {
+    "sport": "Modern Pentathlon",
+    "category": "Other",
+    "session_count": 4
+  },
+  {
+    "sport": "Mountain Bike",
+    "category": "Cycling",
+    "session_count": 2
+  },
+  {
+    "sport": "Open Water Swimming",
+    "category": "Aquatics",
+    "session_count": 2
+  },
+  {
+    "sport": "Rhythmic Gymnastics",
+    "category": "Gymnastics",
+    "session_count": 5
+  },
+  {
+    "sport": "Rowing",
+    "category": "Water Sports",
+    "session_count": 8
+  },
+  {
+    "sport": "Rowing Coastal Beach Sprints",
+    "category": "Water Sports",
+    "session_count": 4
+  },
+  {
+    "sport": "Rugby Sevens",
+    "category": "Ball Sports",
+    "session_count": 12
+  },
+  {
+    "sport": "Sailing (Dinghy, Skiff & Multihull)",
+    "category": "Water Sports",
+    "session_count": 6
+  },
+  {
+    "sport": "Sailing (Windsurfing & Kite)",
+    "category": "Water Sports",
+    "session_count": 5
+  },
+  {
+    "sport": "Shooting (Rifle & Pistol)",
+    "category": "Shooting & Archery",
+    "session_count": 7
+  },
+  {
+    "sport": "Shooting (Shotgun)",
+    "category": "Shooting & Archery",
+    "session_count": 5
+  },
+  {
+    "sport": "Skateboarding (Park)",
+    "category": "Other",
+    "session_count": 4
+  },
+  {
+    "sport": "Skateboarding (Street)",
+    "category": "Other",
+    "session_count": 4
+  },
+  {
+    "sport": "Softball",
+    "category": "Ball Sports",
+    "session_count": 17
+  },
+  {
+    "sport": "Squash",
+    "category": "Racquet Sports",
+    "session_count": 10
+  },
+  {
+    "sport": "Surfing",
+    "category": "Water Sports",
+    "session_count": 4
+  },
+  {
+    "sport": "Swimming",
+    "category": "Aquatics",
+    "session_count": 17
+  },
+  {
+    "sport": "Table Tennis",
+    "category": "Racquet Sports",
+    "session_count": 37
+  },
+  {
+    "sport": "Taekwondo",
+    "category": "Combat Sports",
+    "session_count": 12
+  },
+  {
+    "sport": "Tennis",
+    "category": "Racquet Sports",
+    "session_count": 41
+  },
+  {
+    "sport": "Trampoline Gymnastics",
+    "category": "Gymnastics",
+    "session_count": 2
+  },
+  {
+    "sport": "Triathlon",
+    "category": "Other",
+    "session_count": 3
+  },
+  {
+    "sport": "Volleyball",
+    "category": "Ball Sports",
+    "session_count": 52
+  },
+  {
+    "sport": "Water Polo",
+    "category": "Aquatics",
+    "session_count": 28
+  },
+  {
+    "sport": "Weightlifting",
+    "category": "Other",
+    "session_count": 10
+  },
+  {
+    "sport": "Wrestling",
+    "category": "Combat Sports",
+    "session_count": 13
+  }
+]
