@@ -118,4 +118,4 @@ All schedule data is from the [LA28 Official Competition Schedule v3.0](https://
 
 ## License
 
-MIT
+MIT-0 (MIT No Attribution)
