@@ -6,6 +6,7 @@ import { SessionList } from "@/components/SessionList";
 import { MedalFilterToggle } from "@/components/MedalFilter";
 import {
   ALL_DATES,
+  DEFAULT_DATE_RANGE,
   filterSessions,
   getVenueSessionCounts,
   sessions,
@@ -13,15 +14,13 @@ import {
 import type { MedalFilter } from "@/types";
 
 function App() {
-  const [dateIndex, setDateIndex] = useState(5); // Day 1 = July 15
+  const [dateRange, setDateRange] = useState<[number, number] | null>(DEFAULT_DATE_RANGE);
   const [selectedSports, setSelectedSports] = useState<Set<string>>(new Set());
   const [medalFilter, setMedalFilter] = useState<MedalFilter>("all");
 
-  const selectedDate = ALL_DATES[dateIndex];
-
   const filteredSessions = useMemo(
-    () => filterSessions(selectedDate, selectedSports, medalFilter),
-    [selectedDate, selectedSports, medalFilter]
+    () => filterSessions(dateRange, selectedSports, medalFilter),
+    [dateRange, selectedSports, medalFilter]
   );
 
   const venueCounts = useMemo(
@@ -29,15 +28,21 @@ function App() {
     [filteredSessions]
   );
 
-  // Count sessions by sport for the selected date (ignoring sport filter)
+  // Count sessions by sport for the selected date range (ignoring sport filter)
   const sportSessionCounts = useMemo(() => {
-    const dateSessions = sessions.filter((s) => s.date === selectedDate);
+    const startDate = dateRange !== null ? ALL_DATES[dateRange[0]] : null;
+    const endDate = dateRange !== null ? ALL_DATES[dateRange[1]] : null;
+    const dateSessions = sessions.filter((s) => {
+      if (startDate && endDate && (s.date < startDate || s.date > endDate))
+        return false;
+      return true;
+    });
     const counts = new Map<string, number>();
     for (const s of dateSessions) {
       counts.set(s.sport, (counts.get(s.sport) || 0) + 1);
     }
     return counts;
-  }, [selectedDate]);
+  }, [dateRange]);
 
   const toggleSport = useCallback((sport: string) => {
     setSelectedSports((prev) => {
@@ -74,14 +79,11 @@ function App() {
       </header>
 
       <main className="max-w-7xl mx-auto p-4">
-        <div className="mb-4 flex flex-col sm:flex-row sm:items-end gap-4">
-          <div className="flex-1">
-            <DateSlider
-              selectedDateIndex={dateIndex}
-              onDateChange={setDateIndex}
-            />
-          </div>
-          <MedalFilterToggle value={medalFilter} onChange={setMedalFilter} />
+        <div className="mb-4">
+          <DateSlider
+            dateRange={dateRange}
+            onDateRangeChange={setDateRange}
+          />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-4">
@@ -93,7 +95,8 @@ function App() {
             <SessionList sessions={filteredSessions} />
           </div>
 
-          <aside className="lg:border-l lg:pl-4">
+          <aside className="lg:border-l lg:pl-4 space-y-4">
+            <MedalFilterToggle value={medalFilter} onChange={setMedalFilter} />
             <SportFilter
               selectedSports={selectedSports}
               onToggleSport={toggleSport}

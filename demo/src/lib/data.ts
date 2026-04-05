@@ -15,13 +15,22 @@ export const ALL_SPORTS = [...new Set(sessions.map((s) => s.sport))].sort();
 
 export const CATEGORIES = [...new Set(sports.map((s) => s.category))].sort();
 
+// Index of Day 0 (Opening Ceremony, July 14) and Day 16 (Closing Ceremony, July 30)
+export const DAY_0_INDEX = ALL_DATES.indexOf("2028-07-14");
+export const DAY_16_INDEX = ALL_DATES.indexOf("2028-07-30");
+export const DEFAULT_DATE_RANGE: [number, number] = [DAY_0_INDEX, DAY_16_INDEX];
+
 export function filterSessions(
-  selectedDate: string | null,
+  dateRange: [number, number] | null,
   selectedSports: Set<string>,
   medalFilter: MedalFilter = "all"
 ): Session[] {
+  const startDate = dateRange !== null ? ALL_DATES[dateRange[0]] : null;
+  const endDate = dateRange !== null ? ALL_DATES[dateRange[1]] : null;
+
   return sessions.filter((s) => {
-    if (selectedDate && s.date !== selectedDate) return false;
+    if (startDate && endDate && (s.date < startDate || s.date > endDate))
+      return false;
     if (selectedSports.size > 0 && !selectedSports.has(s.sport)) return false;
     if (medalFilter === "gold" && !s.has_gold_medal) return false;
     if (medalFilter === "bronze" && !s.has_bronze_medal) return false;

@@ -85,6 +85,7 @@ export function MapView({ filteredSessions, venueCounts }: MapViewProps) {
         <FitBounds venueCounts={venueCounts} />
         {laVenues.map(([name, v]) => {
           const count = venueCounts.get(name) || 0;
+          if (count === 0) return null;
           const sessionsAtVenue = filteredSessions.filter(
             (s) => s.venue === name
           );
