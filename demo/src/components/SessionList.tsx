@@ -28,12 +28,23 @@ export function SessionList({ sessions, maxDisplay = 50 }: SessionListProps) {
               <CardContent className="px-3 py-0 space-y-1">
                 <div className="flex items-start justify-between gap-2">
                   <span className="font-medium text-sm">{s.sport}</span>
-                  <Badge
-                    variant={s.session_type === "Final" ? "default" : "secondary"}
-                    className="text-xs shrink-0"
-                  >
-                    {s.session_type}
-                  </Badge>
+                  <div className="flex gap-1 shrink-0">
+                    {s.has_gold_medal && (
+                      <Badge className="text-xs bg-yellow-500 text-yellow-950 hover:bg-yellow-500">
+                        Gold
+                      </Badge>
+                    )}
+                    {s.has_bronze_medal && (
+                      <Badge className="text-xs bg-amber-700 text-amber-50 hover:bg-amber-700">
+                        Bronze
+                      </Badge>
+                    )}
+                    {!s.has_gold_medal && !s.has_bronze_medal && (
+                      <Badge variant="secondary" className="text-xs">
+                        {s.session_type}
+                      </Badge>
+                    )}
+                  </div>
                 </div>
                 <p className="text-xs text-muted-foreground">
                   {displayName} &middot; {s.start_time}–{s.end_time}

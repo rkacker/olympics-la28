@@ -11,7 +11,11 @@ export interface Session {
   start_time: string;
   end_time: string;
   times_are_local: string;
+  has_gold_medal: boolean;
+  has_bronze_medal: boolean;
 }
+
+export type MedalFilter = "all" | "gold" | "bronze";
 
 export interface Venue {
   local_name: string | null;

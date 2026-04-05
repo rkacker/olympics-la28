@@ -1,7 +1,7 @@
 import scheduleData from "@/data/schedule.json";
 import venuesData from "@/data/venues.json";
 import sportsData from "@/data/sports.json";
-import type { Session, Venues, Sport } from "@/types";
+import type { Session, Venues, Sport, MedalFilter } from "@/types";
 
 export const sessions: Session[] = scheduleData as Session[];
 export const venues: Venues = venuesData as Venues;
@@ -17,11 +17,14 @@ export const CATEGORIES = [...new Set(sports.map((s) => s.category))].sort();
 
 export function filterSessions(
   selectedDate: string | null,
-  selectedSports: Set<string>
+  selectedSports: Set<string>,
+  medalFilter: MedalFilter = "all"
 ): Session[] {
   return sessions.filter((s) => {
     if (selectedDate && s.date !== selectedDate) return false;
     if (selectedSports.size > 0 && !selectedSports.has(s.sport)) return false;
+    if (medalFilter === "gold" && !s.has_gold_medal) return false;
+    if (medalFilter === "bronze" && !s.has_bronze_medal) return false;
     return true;
   });
 }

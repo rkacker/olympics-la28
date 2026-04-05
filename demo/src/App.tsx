@@ -3,22 +3,25 @@ import { MapView } from "@/components/Map";
 import { DateSlider } from "@/components/DateSlider";
 import { SportFilter } from "@/components/SportFilter";
 import { SessionList } from "@/components/SessionList";
+import { MedalFilterToggle } from "@/components/MedalFilter";
 import {
   ALL_DATES,
   filterSessions,
   getVenueSessionCounts,
   sessions,
 } from "@/lib/data";
+import type { MedalFilter } from "@/types";
 
 function App() {
   const [dateIndex, setDateIndex] = useState(5); // Day 1 = July 15
   const [selectedSports, setSelectedSports] = useState<Set<string>>(new Set());
+  const [medalFilter, setMedalFilter] = useState<MedalFilter>("all");
 
   const selectedDate = ALL_DATES[dateIndex];
 
   const filteredSessions = useMemo(
-    () => filterSessions(selectedDate, selectedSports),
-    [selectedDate, selectedSports]
+    () => filterSessions(selectedDate, selectedSports, medalFilter),
+    [selectedDate, selectedSports, medalFilter]
   );
 
   const venueCounts = useMemo(
@@ -71,11 +74,14 @@ function App() {
       </header>
 
       <main className="max-w-7xl mx-auto p-4">
-        <div className="mb-4">
-          <DateSlider
-            selectedDateIndex={dateIndex}
-            onDateChange={setDateIndex}
-          />
+        <div className="mb-4 flex flex-col sm:flex-row sm:items-end gap-4">
+          <div className="flex-1">
+            <DateSlider
+              selectedDateIndex={dateIndex}
+              onDateChange={setDateIndex}
+            />
+          </div>
+          <MedalFilterToggle value={medalFilter} onChange={setMedalFilter} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-4">

@@ -66,6 +66,35 @@ def parse_events(description: str) -> list[str]:
     return [e.strip() for e in description.split("\n") if e.strip()]
 
 
+def classify_medals(session_type: str, events: list[str]) -> tuple[bool, bool]:
+    """Determine if a session contains gold and/or bronze medal events.
+
+    Returns (has_gold_medal, has_bronze_medal).
+    """
+    events_lower = [e.lower() for e in events]
+    all_text = " ".join(events_lower)
+
+    has_gold = False
+    has_bronze = False
+
+    # "Final" session_type = gold medal session (the event itself is the final,
+    # even if the event name doesn't say "gold" — e.g. marathons, road races)
+    if session_type == "Final":
+        has_gold = True
+
+    # Check event text for explicit medal keywords
+    if any(kw in all_text for kw in ["gold medal", "gold contest"]):
+        has_gold = True
+    if any(kw in all_text for kw in ["bronze medal", "bronze contest"]):
+        has_bronze = True
+
+    # "Bronze" session_type = bronze medal session
+    if session_type == "Bronze":
+        has_bronze = True
+
+    return has_gold, has_bronze
+
+
 def extract_sessions(pdf_path: Path) -> list[dict]:
     """Extract all sessions from the ByEvent PDF."""
     sessions = []
@@ -94,6 +123,10 @@ def extract_sessions(pdf_path: Path) -> list[dict]:
                     end_raw = row[9] or ""
                     is_okc_time = has_okc_time(start_raw) or has_okc_time(end_raw)
 
+                    session_type = (row[6] or "").strip()
+                    events = parse_events(row[7])
+                    has_gold, has_bronze = classify_medals(session_type, events)
+
                     session = {
                         "sport": sport,
                         "venue": " ".join((row[1] or "").split()),
@@ -102,11 +135,13 @@ def extract_sessions(pdf_path: Path) -> list[dict]:
                         "date": date_iso,
                         "day_of_week": day_of_week,
                         "games_day": int(row[5]) if row[5] and row[5].strip().lstrip("-").isdigit() else None,
-                        "session_type": (row[6] or "").strip(),
-                        "events": parse_events(row[7]),
+                        "session_type": session_type,
+                        "events": events,
                         "start_time": clean_time(start_raw),
                         "end_time": clean_time(end_raw),
                         "times_are_local": "OKC" if is_okc_time else "PT",
+                        "has_gold_medal": has_gold,
+                        "has_bronze_medal": has_bronze,
                     }
                     sessions.append(session)
     return sessions
@@ -124,7 +159,7 @@ def write_csv(sessions: list[dict], path: Path) -> None:
     fieldnames = [
         "sport", "venue", "zone", "session_code", "date", "day_of_week",
         "games_day", "session_type", "events", "start_time", "end_time",
-        "times_are_local",
+        "times_are_local", "has_gold_medal", "has_bronze_medal",
     ]
     with open(path, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)

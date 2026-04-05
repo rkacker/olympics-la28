@@ -35,13 +35,17 @@ Each entry in `schedule.json` represents one competition session:
   ],
   "start_time": "09:00",
   "end_time": "13:30",
-  "times_are_local": "PT"
+  "times_are_local": "PT",
+  "has_gold_medal": false,
+  "has_bronze_medal": false
 }
 ```
 
 - `games_day`: Day relative to the Opening Ceremony (Day 0 = July 14). Ranges from -4 to 16.
 - `times_are_local`: `"PT"` for Pacific Time, `"OKC"` for Oklahoma City local time (Central Time).
 - `events`: Individual events/rounds within the session.
+- `has_gold_medal`: `true` if the session includes gold medal events (finals).
+- `has_bronze_medal`: `true` if the session includes bronze medal events.
 
 ### Venue Schema
 
