@@ -1,0 +1,104 @@
+import { useState, useMemo, useCallback } from "react";
+import { MapView } from "@/components/Map";
+import { DateSlider } from "@/components/DateSlider";
+import { SportFilter } from "@/components/SportFilter";
+import { SessionList } from "@/components/SessionList";
+import {
+  ALL_DATES,
+  filterSessions,
+  getVenueSessionCounts,
+  sessions,
+} from "@/lib/data";
+
+function App() {
+  const [dateIndex, setDateIndex] = useState(5); // Day 1 = July 15
+  const [selectedSports, setSelectedSports] = useState<Set<string>>(new Set());
+
+  const selectedDate = ALL_DATES[dateIndex];
+
+  const filteredSessions = useMemo(
+    () => filterSessions(selectedDate, selectedSports),
+    [selectedDate, selectedSports]
+  );
+
+  const venueCounts = useMemo(
+    () => getVenueSessionCounts(filteredSessions),
+    [filteredSessions]
+  );
+
+  // Count sessions by sport for the selected date (ignoring sport filter)
+  const sportSessionCounts = useMemo(() => {
+    const dateSessions = sessions.filter((s) => s.date === selectedDate);
+    const counts = new Map<string, number>();
+    for (const s of dateSessions) {
+      counts.set(s.sport, (counts.get(s.sport) || 0) + 1);
+    }
+    return counts;
+  }, [selectedDate]);
+
+  const toggleSport = useCallback((sport: string) => {
+    setSelectedSports((prev) => {
+      const next = new Set(prev);
+      if (next.has(sport)) next.delete(sport);
+      else next.add(sport);
+      return next;
+    });
+  }, []);
+
+  const clearSports = useCallback(() => setSelectedSports(new Set()), []);
+
+  return (
+    <div className="min-h-screen bg-background">
+      <header className="border-b px-4 py-3">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-bold tracking-tight">
+              LA 2028 Olympics Schedule Explorer
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              {sessions.length} sessions across {ALL_DATES.length} days
+            </p>
+          </div>
+          <a
+            href="https://la28.org/en/games-plan/olympics.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-muted-foreground hover:text-foreground underline"
+          >
+            Source: la28.org
+          </a>
+        </div>
+      </header>
+
+      <main className="max-w-7xl mx-auto p-4">
+        <div className="mb-4">
+          <DateSlider
+            selectedDateIndex={dateIndex}
+            onDateChange={setDateIndex}
+          />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-4">
+          <div className="space-y-4">
+            <MapView
+              filteredSessions={filteredSessions}
+              venueCounts={venueCounts}
+            />
+            <SessionList sessions={filteredSessions} />
+          </div>
+
+          <aside className="lg:border-l lg:pl-4">
+            <SportFilter
+              selectedSports={selectedSports}
+              onToggleSport={toggleSport}
+              onClearAll={clearSports}
+              sessionCounts={sportSessionCounts}
+            />
+          </aside>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+export default App;
