@@ -1,6 +1,6 @@
 # 🏅 Olympics LA28
 
-Structured data for the **LA 2028 Olympic Games** competition schedule — ready for you to build something cool with.
+Structured data for the **LA 2028 Olympic Games** competition schedule.
 
 Extracted from the [official LA28 competition schedule PDFs](https://la28.org/en/games-plan/olympics.html) and packaged as clean, machine-readable JSON and CSV. 843 sessions, 58 sports, 52 venues, 21 competition days (July 10–30, 2028). Includes a demo interactive map to explore it all.
 
