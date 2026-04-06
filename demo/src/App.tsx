@@ -74,16 +74,16 @@ function App() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b px-4 py-3">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
           <div>
-            <h1 className="text-xl font-bold tracking-tight">
+            <h1 className="text-lg sm:text-xl font-bold tracking-tight">
               LA 2028 Olympics Schedule Explorer
             </h1>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs sm:text-sm text-muted-foreground">
               {sessions.length} sessions across {ALL_DATES.length} days
             </p>
           </div>
-          <div className="text-xs text-muted-foreground text-right">
+          <div className="text-xs text-muted-foreground">
             <span>Source PDFs: </span>
             <a href="https://la28.org/content/dam/latwentyeight/competition-schedule-imagery/uploaded-march-16-v-3-0/LA28OlympicGamesCompetitionScheduleByDayV3.0.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-foreground underline">By Day</a>
             {" · "}
@@ -103,17 +103,8 @@ function App() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-4">
-          <div className="space-y-4">
-            <MapView
-              filteredSessions={filteredSessions}
-              venueCounts={venueCounts}
-              geoFilter={geoFilter}
-              onGeoFilterChange={setGeoFilter}
-            />
-            <SessionList sessions={geoFilteredSessions} />
-          </div>
-
-          <aside className="lg:border-l lg:pl-4 space-y-4">
+          {/* Filters: show first on mobile, in sidebar on desktop */}
+          <aside className="lg:border-l lg:pl-4 space-y-4 order-first lg:order-last lg:col-start-2 lg:row-start-1 lg:row-span-2">
             <MedalFilterToggle value={medalFilter} onChange={setMedalFilter} />
             <SportFilter
               selectedSports={selectedSports}
@@ -122,6 +113,16 @@ function App() {
               sessionCounts={sportSessionCounts}
             />
           </aside>
+
+          <div className="space-y-4 order-last lg:order-first">
+            <MapView
+              filteredSessions={filteredSessions}
+              venueCounts={venueCounts}
+              geoFilter={geoFilter}
+              onGeoFilterChange={setGeoFilter}
+            />
+            <SessionList sessions={geoFilteredSessions} />
+          </div>
         </div>
       </main>
     </div>

@@ -54,7 +54,7 @@ export function SportFilter({
         onChange={(e) => setQuery(e.target.value)}
         className="w-full text-sm px-2 py-1 rounded-md border border-border bg-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
       />
-      <div className="max-h-[400px] overflow-y-auto space-y-3 pr-1">
+      <div className="max-h-[200px] lg:max-h-[400px] overflow-y-auto space-y-3 pr-1">
         {[...sportsByCategory.keys()].map((cat) => (
           <div key={cat}>
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">

@@ -32,34 +32,31 @@ export function DateSlider({ dateRange, onDateRangeChange }: DateSliderProps) {
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-medium">Dates</h3>
-        <div className="flex items-center gap-2">
-          {!isAllDates && (
-            <button
-              onClick={() => onDateRangeChange(null)}
-              className="text-xs text-muted-foreground hover:text-foreground underline"
-            >
-              Include prelims
-            </button>
-          )}
-          <span className="text-sm font-semibold">
-            {isAllDates ? "All dates (incl. prelims)" : formatRangeLabel(range)}
-          </span>
-        </div>
+        <span className="text-sm font-semibold">
+          {isAllDates ? "All dates" : formatRangeLabel(range)}
+        </span>
       </div>
-      <Slider
-        value={[range[0], range[1]]}
-        onValueChange={(v) => {
-          const vals = Array.isArray(v) ? v : [v, v];
-          onDateRangeChange([vals[0], vals[1]]);
-        }}
-        min={0}
-        max={maxIndex}
-        step={1}
-      />
-      <div className="flex justify-between text-xs text-muted-foreground">
-        <span>Prelims · {formatDate(ALL_DATES[0])}</span>
-        <span className="text-center">Day 0 · {formatDate(ALL_DATES[DAY_0_INDEX])}</span>
-        <span>Day 16 · {formatDate(ALL_DATES[maxIndex])}</span>
+      <div className="relative">
+        <Slider
+          value={[range[0], range[1]]}
+          onValueChange={(v) => {
+            const vals = Array.isArray(v) ? v : [v, v];
+            onDateRangeChange([vals[0], vals[1]]);
+          }}
+          min={0}
+          max={maxIndex}
+          step={1}
+        />
+        {/* Tick marks for Prelims start, Day 0, Day 16 */}
+        <div className="absolute inset-x-0 top-0 h-full pointer-events-none" aria-hidden>
+          {[0, DAY_0_INDEX, maxIndex].map((idx) => (
+            <div
+              key={idx}
+              className="absolute top-1/2 w-px h-3 -translate-y-1/2 bg-muted-foreground/40"
+              style={{ left: `${(idx / maxIndex) * 100}%` }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

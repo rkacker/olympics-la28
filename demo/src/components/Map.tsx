@@ -222,7 +222,7 @@ export function MapView({ filteredSessions, venueCounts, geoFilter, onGeoFilterC
       <MapContainer
         center={LA_CENTER}
         zoom={LA_ZOOM}
-        className="h-[500px] w-full rounded-lg border"
+        className="h-[350px] sm:h-[500px] w-full rounded-lg border"
         scrollWheelZoom={true}
       >
         <TileLayer
