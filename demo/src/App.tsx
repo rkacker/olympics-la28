@@ -67,14 +67,14 @@ function App() {
               {sessions.length} sessions across {ALL_DATES.length} days
             </p>
           </div>
-          <a
-            href="https://la28.org/en/games-plan/olympics.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs text-muted-foreground hover:text-foreground underline"
-          >
-            Source: la28.org
-          </a>
+          <div className="text-xs text-muted-foreground text-right">
+            <span>Source PDFs: </span>
+            <a href="https://la28.org/content/dam/latwentyeight/competition-schedule-imagery/uploaded-march-16-v-3-0/LA28OlympicGamesCompetitionScheduleByDayV3.0.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-foreground underline">By Day</a>
+            {" · "}
+            <a href="https://la28.org/content/dam/latwentyeight/competition-schedule-imagery/uploaded-march-16-v-3-0/LA28OlympicGamesCompetitionScheduleByEventV3.0.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-foreground underline">By Event</a>
+            {" · "}
+            <a href="https://la28.org/content/dam/latwentyeight/competition-schedule-imagery/uploaded-march-16-v-3-0/LA28OlympicGamesCompetitionScheduleBySessionV3.0.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-foreground underline">By Session</a>
+          </div>
         </div>
       </header>
 

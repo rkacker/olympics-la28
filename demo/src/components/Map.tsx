@@ -7,7 +7,7 @@ import {
   useMap,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { venues } from "@/lib/data";
+import { venues, formatDate } from "@/lib/data";
 import type { Session } from "@/types";
 
 const LA_CENTER: [number, number] = [33.95, -118.25];
@@ -56,19 +56,6 @@ export function MapView({ filteredSessions, venueCounts }: MapViewProps) {
     ([name, v]) => v.is_la_area && name !== "N/A" && name !== "TBD"
   );
 
-  const remoteVenues = Object.entries(venues).filter(
-    ([name, v]) => !v.is_la_area && name !== "N/A" && name !== "TBD"
-  );
-
-  const remoteCounts = remoteVenues
-    .map(([name, v]) => ({
-      name,
-      localName: v.local_name,
-      city: v.city,
-      state: v.state,
-      count: venueCounts.get(name) || 0,
-    }))
-    .filter((r) => r.count > 0);
 
   return (
     <div className="space-y-2">
@@ -116,7 +103,9 @@ export function MapView({ filteredSessions, venueCounts }: MapViewProps) {
                       {sessionsAtVenue.slice(0, 10).map((s) => (
                         <li key={s.session_code}>
                           <span className="font-medium">{s.sport}</span>{" "}
-                          {s.start_time}–{s.end_time}
+                          <span className="text-gray-500">
+                            {formatDate(s.date)}{s.start_time ? ` · ${s.start_time}–${s.end_time}` : ""}
+                          </span>
                         </li>
                       ))}
                       {sessionsAtVenue.length > 10 && (
@@ -133,17 +122,6 @@ export function MapView({ filteredSessions, venueCounts }: MapViewProps) {
         })}
       </MapContainer>
 
-      {remoteCounts.length > 0 && (
-        <div className="text-xs text-muted-foreground">
-          <span className="font-medium">Outside LA: </span>
-          {remoteCounts.map((r, i) => (
-            <span key={r.name}>
-              {i > 0 && ", "}
-              {r.localName || r.name} ({r.city}, {r.count} sessions)
-            </span>
-          ))}
-        </div>
-      )}
     </div>
   );
 }

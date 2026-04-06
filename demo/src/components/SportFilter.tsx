@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { sports, CATEGORIES } from "@/lib/data";
@@ -15,12 +16,17 @@ export function SportFilter({
   onClearAll,
   sessionCounts,
 }: SportFilterProps) {
+  const [query, setQuery] = useState("");
+  const lowerQuery = query.toLowerCase();
+
   const sportsByCategory = new Map<string, typeof sports>();
   for (const cat of CATEGORIES) {
-    sportsByCategory.set(
-      cat,
-      sports.filter((s) => s.category === cat)
+    const filtered = sports.filter(
+      (s) => s.category === cat && s.sport.toLowerCase().includes(lowerQuery)
     );
+    if (filtered.length > 0) {
+      sportsByCategory.set(cat, filtered);
+    }
   }
 
   // Count sessions per sport from filtered data
@@ -41,8 +47,15 @@ export function SportFilter({
           </button>
         )}
       </div>
+      <input
+        type="text"
+        placeholder="Search sports..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        className="w-full text-sm px-2 py-1 rounded-md border border-border bg-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+      />
       <div className="max-h-[400px] overflow-y-auto space-y-3 pr-1">
-        {CATEGORIES.map((cat) => (
+        {[...sportsByCategory.keys()].map((cat) => (
           <div key={cat}>
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
               {cat}

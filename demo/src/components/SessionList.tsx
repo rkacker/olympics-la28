@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { venues } from "@/lib/data";
+import { venues, formatDate } from "@/lib/data";
 import type { Session } from "@/types";
 
 interface SessionListProps {
@@ -29,6 +29,11 @@ export function SessionList({ sessions, maxDisplay = 50 }: SessionListProps) {
                 <div className="flex items-start justify-between gap-2">
                   <span className="font-medium text-sm">{s.sport}</span>
                   <div className="flex gap-1 shrink-0">
+                    {venue && !venue.is_la_area && (
+                      <Badge variant="outline" className="text-xs">
+                        Remote
+                      </Badge>
+                    )}
                     {s.has_gold_medal && (
                       <Badge className="text-xs bg-yellow-500 text-yellow-950 hover:bg-yellow-500">
                         Gold
@@ -47,8 +52,9 @@ export function SessionList({ sessions, maxDisplay = 50 }: SessionListProps) {
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {displayName} &middot; {s.start_time}–{s.end_time}
+                  {formatDate(s.date)} &middot; {s.start_time}–{s.end_time}
                   {s.times_are_local !== "PT" && ` (${s.times_are_local})`}
+                  {" · "}{displayName}
                 </p>
                 <p className="text-xs text-muted-foreground line-clamp-2">
                   {s.events.join(", ")}
