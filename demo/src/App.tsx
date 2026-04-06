@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import { MapView } from "@/components/Map";
+import { MapView, type GeoFilter } from "@/components/Map";
 import { DateSlider } from "@/components/DateSlider";
 import { SportFilter } from "@/components/SportFilter";
 import { SessionList } from "@/components/SessionList";
@@ -10,6 +10,7 @@ import {
   filterSessions,
   getVenueSessionCounts,
   sessions,
+  venues,
 } from "@/lib/data";
 import type { MedalFilter } from "@/types";
 
@@ -17,6 +18,7 @@ function App() {
   const [dateRange, setDateRange] = useState<[number, number] | null>(DEFAULT_DATE_RANGE);
   const [selectedSports, setSelectedSports] = useState<Set<string>>(new Set());
   const [medalFilter, setMedalFilter] = useState<MedalFilter>("all");
+  const [geoFilter, setGeoFilter] = useState<GeoFilter>("all");
 
   const filteredSessions = useMemo(
     () => filterSessions(dateRange, selectedSports, medalFilter),
@@ -27,6 +29,20 @@ function App() {
     () => getVenueSessionCounts(filteredSessions),
     [filteredSessions]
   );
+
+  const geoFilteredSessions = useMemo(() => {
+    if (geoFilter === "all") {
+      return filteredSessions.filter((s) => {
+        const v = venues[s.venue];
+        return v?.is_la_area;
+      });
+    }
+    if (geoFilter === "TBD") return filteredSessions.filter((s) => s.venue === "N/A" || s.venue === "TBD");
+    return filteredSessions.filter((s) => {
+      const v = venues[s.venue];
+      return v && `${v.city}, ${v.state}` === geoFilter;
+    });
+  }, [filteredSessions, geoFilter]);
 
   // Count sessions by sport for the selected date range (ignoring sport filter)
   const sportSessionCounts = useMemo(() => {
@@ -91,8 +107,10 @@ function App() {
             <MapView
               filteredSessions={filteredSessions}
               venueCounts={venueCounts}
+              geoFilter={geoFilter}
+              onGeoFilterChange={setGeoFilter}
             />
-            <SessionList sessions={filteredSessions} />
+            <SessionList sessions={geoFilteredSessions} />
           </div>
 
           <aside className="lg:border-l lg:pl-4 space-y-4">

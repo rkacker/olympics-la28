@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useMemo } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -16,9 +16,13 @@ const LA_CENTER: [number, number] = [33.95, -118.25];
 const LA_ZOOM = 10;
 const REMOTE_ZOOM = 12;
 
+export type GeoFilter = "all" | "TBD" | string; // string = "City, ST"
+
 interface MapViewProps {
   filteredSessions: Session[];
   venueCounts: Map<string, number>;
+  geoFilter: GeoFilter;
+  onGeoFilterChange: (filter: GeoFilter) => void;
 }
 
 /** Groups non-LA venues by city, returning city name, coordinates, and total session count. */
@@ -78,7 +82,9 @@ function FlyToControl({
   const map = useMap();
 
   useEffect(() => {
-    if (target) {
+    if (target?.label === "TBD") {
+      map.flyTo([target.lat, target.lng], 4, { duration: 1.2 });
+    } else if (target) {
       map.flyTo([target.lat, target.lng], REMOTE_ZOOM, { duration: 1.2 });
     } else {
       const bounds: [number, number][] = [];
@@ -132,7 +138,7 @@ function getColor(count: number): string {
   return "#ef4444";
 }
 
-export function MapView({ filteredSessions, venueCounts }: MapViewProps) {
+export function MapView({ filteredSessions, venueCounts, geoFilter, onGeoFilterChange }: MapViewProps) {
   const allVenues = Object.entries(venues).filter(
     ([name]) => name !== "N/A" && name !== "TBD"
   );
@@ -146,27 +152,18 @@ export function MapView({ filteredSessions, venueCounts }: MapViewProps) {
     }
     return total;
   }, [venueCounts]);
+  const tbdCount = useMemo(() => {
+    return (venueCounts.get("N/A") || 0) + (venueCounts.get("TBD") || 0);
+  }, [venueCounts]);
 
-  const [flyTarget, setFlyTarget] = useState<{
-    lat: number;
-    lng: number;
-    label: string;
-  } | null>(null);
-
-  const handleCityClick = useCallback(
-    (city: { city: string; state: string; lat: number; lng: number }) => {
-      setFlyTarget({
-        lat: city.lat,
-        lng: city.lng,
-        label: `${city.city}, ${city.state}`,
-      });
-    },
-    []
-  );
-
-  const handleBackToLA = useCallback(() => {
-    setFlyTarget(null);
-  }, []);
+  // Derive flyTarget from geoFilter
+  const flyTarget = useMemo(() => {
+    if (geoFilter === "all") return null;
+    if (geoFilter === "TBD") return null; // no map movement for TBD
+    const rc = remoteCities.find((c) => `${c.city}, ${c.state}` === geoFilter);
+    if (rc) return { lat: rc.lat, lng: rc.lng, label: geoFilter };
+    return null;
+  }, [geoFilter, remoteCities]);
 
   return (
     <div className="space-y-2">
@@ -176,11 +173,11 @@ export function MapView({ filteredSessions, venueCounts }: MapViewProps) {
             Venues:
           </span>
           <button
-            onClick={() => flyTarget ? handleBackToLA() : undefined}
+            onClick={() => onGeoFilterChange("all")}
             className="inline-flex items-center"
           >
             <Badge
-              variant={!flyTarget ? "default" : "secondary"}
+              variant={geoFilter === "all" ? "default" : "secondary"}
               className="cursor-pointer gap-1.5"
             >
               LA Area
@@ -189,17 +186,14 @@ export function MapView({ filteredSessions, venueCounts }: MapViewProps) {
           </button>
           {remoteCities.map((rc) => {
             const label = `${rc.city}, ${rc.state}`;
-            const isActive = flyTarget?.label === label;
             return (
               <button
                 key={label}
-                onClick={() =>
-                  isActive ? handleBackToLA() : handleCityClick(rc)
-                }
+                onClick={() => onGeoFilterChange(geoFilter === label ? "all" : label)}
                 className="inline-flex items-center"
               >
                 <Badge
-                  variant={isActive ? "default" : "secondary"}
+                  variant={geoFilter === label ? "default" : "secondary"}
                   className="cursor-pointer gap-1.5"
                 >
                   {rc.city}
@@ -208,6 +202,20 @@ export function MapView({ filteredSessions, venueCounts }: MapViewProps) {
               </button>
             );
           })}
+          {tbdCount > 0 && (
+            <button
+              onClick={() => onGeoFilterChange(geoFilter === "TBD" ? "all" : "TBD")}
+              className="inline-flex items-center"
+            >
+              <Badge
+                variant={geoFilter === "TBD" ? "default" : "secondary"}
+                className="cursor-pointer gap-1.5"
+              >
+                TBD
+                <span className="opacity-70">{tbdCount}</span>
+              </Badge>
+            </button>
+          )}
         </div>
       )}
 
@@ -221,9 +229,9 @@ export function MapView({ filteredSessions, venueCounts }: MapViewProps) {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {!flyTarget && <FitBounds venueCounts={venueCounts} />}
-        <FlyToControl target={flyTarget} onReset={handleBackToLA} venueCounts={venueCounts} />
-        {allVenues.map(([name, v]) => {
+        {!flyTarget && geoFilter !== "TBD" && <FitBounds venueCounts={venueCounts} />}
+        <FlyToControl target={flyTarget} onReset={() => onGeoFilterChange("all")} venueCounts={venueCounts} />
+        {geoFilter !== "TBD" && allVenues.map(([name, v]) => {
           const count = venueCounts.get(name) || 0;
           if (count === 0) return null;
           const sessionsAtVenue = filteredSessions.filter(
