@@ -97,6 +97,8 @@ python scripts/extract_schedule.py
 
 ## 🗺️ Demo Visualization
 
+![Demo screenshot — last week of the Games, gold medal events only](assets/demo-screenshot.png)
+
 An interactive map explorer built with React, Leaflet, and shadcn/ui.
 
 ```bash
