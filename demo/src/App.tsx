@@ -12,12 +12,12 @@ import {
   sessions,
   venues,
 } from "@/lib/data";
-import type { MedalFilter } from "@/types";
+import type { MedalCategories } from "@/types";
 
 function App() {
   const [dateRange, setDateRange] = useState<[number, number] | null>(DEFAULT_DATE_RANGE);
   const [selectedSports, setSelectedSports] = useState<Set<string>>(new Set());
-  const [medalFilter, setMedalFilter] = useState<MedalFilter>("all");
+  const [medalFilter, setMedalFilter] = useState<MedalCategories>({ prelim: true, bronze: true, gold: true });
   const [geoFilter, setGeoFilter] = useState<GeoFilter>("all");
 
   const filteredSessions = useMemo(

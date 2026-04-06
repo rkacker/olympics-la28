@@ -1,15 +1,15 @@
 import { Button } from "@/components/ui/button";
-import type { MedalFilter } from "@/types";
+import type { MedalCategories } from "@/types";
 
 interface MedalFilterToggleProps {
-  value: MedalFilter;
-  onChange: (value: MedalFilter) => void;
+  value: MedalCategories;
+  onChange: (value: MedalCategories) => void;
 }
 
-const options: { value: MedalFilter; label: string }[] = [
-  { value: "all", label: "All" },
-  { value: "gold", label: "Gold" },
-  { value: "bronze", label: "Bronze" },
+const options: { key: keyof MedalCategories; label: string }[] = [
+  { key: "prelim", label: "Prelim" },
+  { key: "bronze", label: "Bronze" },
+  { key: "gold", label: "Gold" },
 ];
 
 export function MedalFilterToggle({ value, onChange }: MedalFilterToggleProps) {
@@ -18,10 +18,10 @@ export function MedalFilterToggle({ value, onChange }: MedalFilterToggleProps) {
       <span className="text-xs text-muted-foreground mr-1">Medals:</span>
       {options.map((opt) => (
         <Button
-          key={opt.value}
+          key={opt.key}
           size="sm"
-          variant={value === opt.value ? "default" : "outline"}
-          onClick={() => onChange(opt.value)}
+          variant={value[opt.key] ? "default" : "outline"}
+          onClick={() => onChange({ ...value, [opt.key]: !value[opt.key] })}
         >
           {opt.label}
         </Button>
