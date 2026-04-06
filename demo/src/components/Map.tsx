@@ -151,6 +151,46 @@ export function MapView({ filteredSessions, venueCounts }: MapViewProps) {
 
   return (
     <div className="space-y-2">
+      {remoteCities.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-xs font-medium text-muted-foreground">
+            Venues:
+          </span>
+          <button
+            onClick={() => flyTarget ? handleBackToLA() : undefined}
+            className="inline-flex items-center"
+          >
+            <Badge
+              variant={!flyTarget ? "default" : "secondary"}
+              className="cursor-pointer gap-1.5"
+            >
+              LA Area
+            </Badge>
+          </button>
+          {remoteCities.map((rc) => {
+            const label = `${rc.city}, ${rc.state}`;
+            const isActive = flyTarget?.label === label;
+            return (
+              <button
+                key={label}
+                onClick={() =>
+                  isActive ? handleBackToLA() : handleCityClick(rc)
+                }
+                className="inline-flex items-center"
+              >
+                <Badge
+                  variant={isActive ? "default" : "secondary"}
+                  className="cursor-pointer gap-1.5"
+                >
+                  {rc.city}
+                  <span className="opacity-70">{rc.count}</span>
+                </Badge>
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       <MapContainer
         center={LA_CENTER}
         zoom={LA_ZOOM}
@@ -214,35 +254,6 @@ export function MapView({ filteredSessions, venueCounts }: MapViewProps) {
           );
         })}
       </MapContainer>
-
-      {remoteCities.length > 0 && (
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs font-medium text-muted-foreground">
-            Remote venues:
-          </span>
-          {remoteCities.map((rc) => {
-            const label = `${rc.city}, ${rc.state}`;
-            const isActive = flyTarget?.label === label;
-            return (
-              <button
-                key={label}
-                onClick={() =>
-                  isActive ? handleBackToLA() : handleCityClick(rc)
-                }
-                className="inline-flex items-center"
-              >
-                <Badge
-                  variant={isActive ? "default" : "secondary"}
-                  className="cursor-pointer gap-1.5"
-                >
-                  {rc.city}
-                  <span className="opacity-70">{rc.count}</span>
-                </Badge>
-              </button>
-            );
-          })}
-        </div>
-      )}
     </div>
   );
 }
