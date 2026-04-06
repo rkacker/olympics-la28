@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -9,13 +9,45 @@ import {
 import "leaflet/dist/leaflet.css";
 import { venues, formatDate } from "@/lib/data";
 import type { Session } from "@/types";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 const LA_CENTER: [number, number] = [33.95, -118.25];
 const LA_ZOOM = 10;
+const REMOTE_ZOOM = 12;
 
 interface MapViewProps {
   filteredSessions: Session[];
   venueCounts: Map<string, number>;
+}
+
+/** Groups non-LA venues by city, returning city name, coordinates, and total session count. */
+function useRemoteCities(venueCounts: Map<string, number>) {
+  return useMemo(() => {
+    const cityMap = new Map<
+      string,
+      { city: string; state: string; lat: number; lng: number; count: number }
+    >();
+    for (const [name, v] of Object.entries(venues)) {
+      if (v.is_la_area || name === "N/A" || name === "TBD") continue;
+      const count = venueCounts.get(name) || 0;
+      if (count === 0) continue;
+      const key = `${v.city}, ${v.state}`;
+      const existing = cityMap.get(key);
+      if (existing) {
+        existing.count += count;
+      } else {
+        cityMap.set(key, {
+          city: v.city,
+          state: v.state,
+          lat: v.lat,
+          lng: v.lng,
+          count,
+        });
+      }
+    }
+    return [...cityMap.values()].sort((a, b) => b.count - a.count);
+  }, [venueCounts]);
 }
 
 function FitBounds({ venueCounts }: { venueCounts: Map<string, number> }) {
@@ -32,6 +64,44 @@ function FitBounds({ venueCounts }: { venueCounts: Map<string, number> }) {
     }
   }, [venueCounts, map]);
   return null;
+}
+
+function FlyToControl({
+  target,
+  onReset,
+}: {
+  target: { lat: number; lng: number; label: string } | null;
+  onReset: () => void;
+}) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (target) {
+      map.flyTo([target.lat, target.lng], REMOTE_ZOOM, { duration: 1.2 });
+    } else {
+      map.flyTo(LA_CENTER, LA_ZOOM, { duration: 1.2 });
+    }
+  }, [target, map]);
+
+  if (!target) return null;
+
+  return (
+    <div className="leaflet-top leaflet-right" style={{ pointerEvents: "auto" }}>
+      <div className="leaflet-control m-2">
+        <Button
+          size="sm"
+          variant="default"
+          className="shadow-lg"
+          onClick={(e) => {
+            e.stopPropagation();
+            onReset();
+          }}
+        >
+          ← Back to LA
+        </Button>
+      </div>
+    </div>
+  );
 }
 
 function getRadius(count: number): number {
@@ -52,10 +122,32 @@ function getColor(count: number): string {
 }
 
 export function MapView({ filteredSessions, venueCounts }: MapViewProps) {
-  const laVenues = Object.entries(venues).filter(
-    ([name, v]) => v.is_la_area && name !== "N/A" && name !== "TBD"
+  const allVenues = Object.entries(venues).filter(
+    ([name]) => name !== "N/A" && name !== "TBD"
   );
 
+  const remoteCities = useRemoteCities(venueCounts);
+
+  const [flyTarget, setFlyTarget] = useState<{
+    lat: number;
+    lng: number;
+    label: string;
+  } | null>(null);
+
+  const handleCityClick = useCallback(
+    (city: { city: string; state: string; lat: number; lng: number }) => {
+      setFlyTarget({
+        lat: city.lat,
+        lng: city.lng,
+        label: `${city.city}, ${city.state}`,
+      });
+    },
+    []
+  );
+
+  const handleBackToLA = useCallback(() => {
+    setFlyTarget(null);
+  }, []);
 
   return (
     <div className="space-y-2">
@@ -69,8 +161,9 @@ export function MapView({ filteredSessions, venueCounts }: MapViewProps) {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <FitBounds venueCounts={venueCounts} />
-        {laVenues.map(([name, v]) => {
+        {!flyTarget && <FitBounds venueCounts={venueCounts} />}
+        <FlyToControl target={flyTarget} onReset={handleBackToLA} />
+        {allVenues.map(([name, v]) => {
           const count = venueCounts.get(name) || 0;
           if (count === 0) return null;
           const sessionsAtVenue = filteredSessions.filter(
@@ -122,6 +215,34 @@ export function MapView({ filteredSessions, venueCounts }: MapViewProps) {
         })}
       </MapContainer>
 
+      {remoteCities.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-xs font-medium text-muted-foreground">
+            Remote venues:
+          </span>
+          {remoteCities.map((rc) => {
+            const label = `${rc.city}, ${rc.state}`;
+            const isActive = flyTarget?.label === label;
+            return (
+              <button
+                key={label}
+                onClick={() =>
+                  isActive ? handleBackToLA() : handleCityClick(rc)
+                }
+                className="inline-flex items-center"
+              >
+                <Badge
+                  variant={isActive ? "default" : "secondary"}
+                  className="cursor-pointer gap-1.5"
+                >
+                  {rc.city}
+                  <span className="opacity-70">{rc.count}</span>
+                </Badge>
+              </button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
