@@ -1,7 +1,7 @@
 import scheduleData from "@/data/schedule.json";
 import venuesData from "@/data/venues.json";
 import sportsData from "@/data/sports.json";
-import type { Session, Venues, Sport, MedalFilter } from "@/types";
+import type { Session, Venues, Sport, MedalCategories } from "@/types";
 
 export const sessions: Session[] = scheduleData as Session[];
 export const venues: Venues = venuesData as Venues;
@@ -20,10 +20,12 @@ export const DAY_0_INDEX = ALL_DATES.indexOf("2028-07-14");
 export const DAY_16_INDEX = ALL_DATES.indexOf("2028-07-30");
 export const DEFAULT_DATE_RANGE: [number, number] = [DAY_0_INDEX, DAY_16_INDEX];
 
+const DEFAULT_MEDAL_CATEGORIES: MedalCategories = { prelim: true, bronze: true, gold: true };
+
 export function filterSessions(
   dateRange: [number, number] | null,
   selectedSports: Set<string>,
-  medalFilter: MedalFilter = "all"
+  medalFilter: MedalCategories = DEFAULT_MEDAL_CATEGORIES
 ): Session[] {
   const startDate = dateRange !== null ? ALL_DATES[dateRange[0]] : null;
   const endDate = dateRange !== null ? ALL_DATES[dateRange[1]] : null;
@@ -32,8 +34,14 @@ export function filterSessions(
     if (startDate && endDate && (s.date < startDate || s.date > endDate))
       return false;
     if (selectedSports.size > 0 && !selectedSports.has(s.sport)) return false;
-    if (medalFilter === "gold" && !s.has_gold_medal) return false;
-    if (medalFilter === "bronze" && !s.has_bronze_medal) return false;
+
+    const isPrelim = !s.has_gold_medal && !s.has_bronze_medal;
+    const passesMedal =
+      (isPrelim && medalFilter.prelim) ||
+      (s.has_gold_medal && medalFilter.gold) ||
+      (s.has_bronze_medal && medalFilter.bronze);
+    if (!passesMedal) return false;
+
     return true;
   });
 }
