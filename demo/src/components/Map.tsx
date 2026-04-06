@@ -69,9 +69,11 @@ function FitBounds({ venueCounts }: { venueCounts: Map<string, number> }) {
 function FlyToControl({
   target,
   onReset,
+  venueCounts,
 }: {
   target: { lat: number; lng: number; label: string } | null;
   onReset: () => void;
+  venueCounts: Map<string, number>;
 }) {
   const map = useMap();
 
@@ -79,9 +81,18 @@ function FlyToControl({
     if (target) {
       map.flyTo([target.lat, target.lng], REMOTE_ZOOM, { duration: 1.2 });
     } else {
-      map.flyTo(LA_CENTER, LA_ZOOM, { duration: 1.2 });
+      const bounds: [number, number][] = [];
+      for (const [name] of venueCounts) {
+        const v = venues[name];
+        if (v?.is_la_area) bounds.push([v.lat, v.lng]);
+      }
+      if (bounds.length > 1) {
+        map.flyToBounds(bounds, { padding: [40, 40], maxZoom: 13, duration: 1.2 });
+      } else {
+        map.flyTo(LA_CENTER, LA_ZOOM, { duration: 1.2 });
+      }
     }
-  }, [target, map]);
+  }, [target, map, venueCounts]);
 
   if (!target) return null;
 
@@ -127,6 +138,14 @@ export function MapView({ filteredSessions, venueCounts }: MapViewProps) {
   );
 
   const remoteCities = useRemoteCities(venueCounts);
+  const laCount = useMemo(() => {
+    let total = 0;
+    for (const [name, count] of venueCounts) {
+      const v = venues[name];
+      if (v?.is_la_area) total += count;
+    }
+    return total;
+  }, [venueCounts]);
 
   const [flyTarget, setFlyTarget] = useState<{
     lat: number;
@@ -165,6 +184,7 @@ export function MapView({ filteredSessions, venueCounts }: MapViewProps) {
               className="cursor-pointer gap-1.5"
             >
               LA Area
+              <span className="opacity-70">{laCount}</span>
             </Badge>
           </button>
           {remoteCities.map((rc) => {
@@ -202,7 +222,7 @@ export function MapView({ filteredSessions, venueCounts }: MapViewProps) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {!flyTarget && <FitBounds venueCounts={venueCounts} />}
-        <FlyToControl target={flyTarget} onReset={handleBackToLA} />
+        <FlyToControl target={flyTarget} onReset={handleBackToLA} venueCounts={venueCounts} />
         {allVenues.map(([name, v]) => {
           const count = venueCounts.get(name) || 0;
           if (count === 0) return null;
