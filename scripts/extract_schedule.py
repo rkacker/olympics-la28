@@ -170,10 +170,67 @@ def write_csv(sessions: list[dict], path: Path) -> None:
     print(f"Wrote {len(sessions)} sessions to {path}")
 
 
+SESSION_PDF_PATH = ROOT / "pdfs" / "LA28OlympicGamesCompetitionScheduleBySessionV3.0.pdf"
+
+
+def extract_ceremonies(pdf_path: Path) -> list[dict]:
+    """Extract ceremony sessions from the BySession PDF.
+
+    Ceremonies aren't in the ByEvent PDF, so we pull them from the BySession PDF
+    which has a different table format (venues as rows, days as columns).
+    """
+    ceremonies = []
+    with pdfplumber.open(pdf_path) as pdf:
+        for page in pdf.pages:
+            tables = page.extract_tables()
+            for table in tables:
+                for row in table:
+                    if not row or len(row) < 2:
+                        continue
+                    label = (row[1] or "").strip()
+                    if "ceremony" not in label.lower():
+                        continue
+                    venue = (row[0] or "").strip()
+                    # Determine date and time from the row
+                    if "closing" in label.lower():
+                        date_iso = "2028-07-30"
+                        day_of_week = "Sunday"
+                        games_day = 16
+                        start_time = "18:00"
+                    else:
+                        date_iso = "2028-07-14"
+                        day_of_week = "Friday"
+                        games_day = 0
+                        start_time = "17:00"
+                    ceremonies.append({
+                        "sport": label,
+                        "venue": venue,
+                        "zone": "",
+                        "session_code": "",
+                        "date": date_iso,
+                        "day_of_week": day_of_week,
+                        "games_day": games_day,
+                        "session_type": "Ceremony",
+                        "events": [label],
+                        "start_time": start_time,
+                        "end_time": "",
+                        "times_are_local": "PT",
+                        "has_gold_medal": False,
+                        "has_bronze_medal": False,
+                    })
+    return ceremonies
+
+
 def main():
     print(f"Extracting from: {PDF_PATH}")
     sessions = extract_sessions(PDF_PATH)
-    print(f"Extracted {len(sessions)} sessions")
+    print(f"Extracted {len(sessions)} competition sessions")
+
+    ceremonies = extract_ceremonies(SESSION_PDF_PATH)
+    print(f"Extracted {len(ceremonies)} ceremony sessions")
+    sessions.extend(ceremonies)
+    sessions.sort(key=lambda s: (s["date"], s["start_time"], s["sport"]))
+    print(f"Total: {len(sessions)} sessions")
 
     # Summary stats
     sports = sorted(set(s["sport"] for s in sessions))
