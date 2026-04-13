@@ -2,27 +2,29 @@ import { useState, useMemo, useCallback } from "react";
 import { MapView, type GeoFilter } from "@/components/Map";
 import { DateSlider } from "@/components/DateSlider";
 import { SportFilter } from "@/components/SportFilter";
+import { RoundFilter } from "@/components/RoundFilter";
 import { SessionList } from "@/components/SessionList";
-import { MedalFilterToggle } from "@/components/MedalFilter";
 import {
   ALL_DATES,
   DEFAULT_DATE_RANGE,
+  ROUND_TYPES,
+  getRoundType,
   filterSessions,
   getVenueSessionCounts,
   sessions,
   venues,
+  type RoundType,
 } from "@/lib/data";
-import type { MedalCategories } from "@/types";
 
 function App() {
   const [dateRange, setDateRange] = useState<[number, number] | null>(DEFAULT_DATE_RANGE);
   const [selectedSports, setSelectedSports] = useState<Set<string>>(new Set());
-  const [medalFilter, setMedalFilter] = useState<MedalCategories>({ prelim: true, bronze: true, gold: true });
+  const [selectedRounds, setSelectedRounds] = useState<Set<RoundType>>(new Set(ROUND_TYPES));
   const [geoFilter, setGeoFilter] = useState<GeoFilter>("all");
 
   const filteredSessions = useMemo(
-    () => filterSessions(dateRange, selectedSports, medalFilter),
-    [dateRange, selectedSports, medalFilter]
+    () => filterSessions(dateRange, selectedSports, selectedRounds),
+    [dateRange, selectedSports, selectedRounds]
   );
 
   const venueCounts = useMemo(
@@ -60,11 +62,34 @@ function App() {
     return counts;
   }, [dateRange]);
 
+  // Count sessions by round type (respects date + sport, ignores round filter)
+  const roundSessionCounts = useMemo(() => {
+    const startDate = dateRange !== null ? ALL_DATES[dateRange[0]] : null;
+    const endDate = dateRange !== null ? ALL_DATES[dateRange[1]] : null;
+    const counts = new Map<RoundType, number>();
+    for (const s of sessions) {
+      if (startDate && endDate && (s.date < startDate || s.date > endDate)) continue;
+      if (selectedSports.size > 0 && !selectedSports.has(s.sport)) continue;
+      const round = getRoundType(s.session_type);
+      counts.set(round, (counts.get(round) || 0) + 1);
+    }
+    return counts;
+  }, [dateRange, selectedSports]);
+
   const toggleSport = useCallback((sport: string) => {
     setSelectedSports((prev) => {
       const next = new Set(prev);
       if (next.has(sport)) next.delete(sport);
       else next.add(sport);
+      return next;
+    });
+  }, []);
+
+  const toggleRound = useCallback((round: RoundType) => {
+    setSelectedRounds((prev) => {
+      const next = new Set(prev);
+      if (next.has(round)) next.delete(round);
+      else next.add(round);
       return next;
     });
   }, []);
@@ -105,7 +130,6 @@ function App() {
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-4">
           {/* Filters: show first on mobile, in sidebar on desktop */}
           <aside className="lg:border-l lg:pl-4 space-y-4 order-first lg:order-last lg:col-start-2 lg:row-start-1 lg:row-span-2">
-            <MedalFilterToggle value={medalFilter} onChange={setMedalFilter} />
             <SportFilter
               selectedSports={selectedSports}
               onToggleSport={toggleSport}
@@ -120,6 +144,13 @@ function App() {
               venueCounts={venueCounts}
               geoFilter={geoFilter}
               onGeoFilterChange={setGeoFilter}
+              beforeMap={
+                <RoundFilter
+                  selectedRounds={selectedRounds}
+                  onToggleRound={toggleRound}
+                  sessionCounts={roundSessionCounts}
+                />
+              }
             />
             <SessionList sessions={geoFilteredSessions} />
           </div>

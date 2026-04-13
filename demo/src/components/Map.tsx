@@ -23,6 +23,7 @@ interface MapViewProps {
   venueCounts: Map<string, number>;
   geoFilter: GeoFilter;
   onGeoFilterChange: (filter: GeoFilter) => void;
+  beforeMap?: React.ReactNode;
 }
 
 /** Groups non-LA venues by city, returning city name, coordinates, and total session count. */
@@ -130,15 +131,9 @@ function getRadius(count: number): number {
   return 18;
 }
 
-function getColor(count: number): string {
-  if (count === 0) return "#94a3b8";
-  if (count <= 2) return "#3b82f6";
-  if (count <= 5) return "#8b5cf6";
-  if (count <= 10) return "#f59e0b";
-  return "#ef4444";
-}
+const MARKER_COLOR = "#FCB131"; // Olympic yellow
 
-export function MapView({ filteredSessions, venueCounts, geoFilter, onGeoFilterChange }: MapViewProps) {
+export function MapView({ filteredSessions, venueCounts, geoFilter, onGeoFilterChange, beforeMap }: MapViewProps) {
   const allVenues = Object.entries(venues).filter(
     ([name]) => name !== "N/A" && name !== "TBD"
   );
@@ -219,6 +214,8 @@ export function MapView({ filteredSessions, venueCounts, geoFilter, onGeoFilterC
         </div>
       )}
 
+      {beforeMap}
+
       <MapContainer
         center={LA_CENTER}
         zoom={LA_ZOOM}
@@ -226,8 +223,8 @@ export function MapView({ filteredSessions, venueCounts, geoFilter, onGeoFilterC
         scrollWheelZoom={true}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
+          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
         />
         {!flyTarget && geoFilter !== "TBD" && <FitBounds venueCounts={venueCounts} />}
         <FlyToControl target={flyTarget} onReset={() => onGeoFilterChange("all")} venueCounts={venueCounts} />
@@ -238,15 +235,14 @@ export function MapView({ filteredSessions, venueCounts, geoFilter, onGeoFilterC
             (s) => s.venue === name
           );
           const displayName = v.local_name || name;
-
           return (
             <CircleMarker
               key={name}
               center={[v.lat, v.lng]}
               radius={getRadius(count)}
-              fillColor={getColor(count)}
-              fillOpacity={count > 0 ? 0.8 : 0.3}
-              color={count > 0 ? "#1e293b" : "#94a3b8"}
+              fillColor={MARKER_COLOR}
+              fillOpacity={0.8}
+              color="#1e293b"
               weight={1}
             >
               <Popup>

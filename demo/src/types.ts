@@ -15,11 +15,7 @@ export interface Session {
   has_bronze_medal: boolean;
 }
 
-export interface MedalCategories {
-  prelim: boolean;
-  bronze: boolean;
-  gold: boolean;
-}
+
 
 export interface Venue {
   local_name: string | null;
