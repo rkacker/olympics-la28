@@ -1,7 +1,7 @@
 import scheduleData from "@/data/schedule.json";
 import venuesData from "@/data/venues.json";
 import sportsData from "@/data/sports.json";
-import type { Session, Venues, Sport, MedalCategories } from "@/types";
+import type { Session, Venues, Sport } from "@/types";
 
 export const sessions: Session[] = scheduleData as Session[];
 export const venues: Venues = venuesData as Venues;
@@ -20,12 +20,21 @@ export const DAY_0_INDEX = ALL_DATES.indexOf("2028-07-14");
 export const DAY_16_INDEX = ALL_DATES.indexOf("2028-07-30");
 export const DEFAULT_DATE_RANGE: [number, number] = [DAY_0_INDEX, DAY_16_INDEX];
 
-const DEFAULT_MEDAL_CATEGORIES: MedalCategories = { prelim: true, bronze: true, gold: true };
+export const ROUND_TYPES = ["Ceremony", "Preliminary", "Quarterfinal", "Semifinal", "Medal"] as const;
+export type RoundType = (typeof ROUND_TYPES)[number];
+
+/** Map raw session_type to a display round type. */
+export function getRoundType(sessionType: string): RoundType {
+  if (sessionType === "Final" || sessionType === "Bronze") return "Medal";
+  if (sessionType === "N/A") return "Preliminary";
+  if (sessionType === "Ceremony") return "Ceremony";
+  return sessionType as RoundType;
+}
 
 export function filterSessions(
   dateRange: [number, number] | null,
   selectedSports: Set<string>,
-  medalFilter: MedalCategories = DEFAULT_MEDAL_CATEGORIES
+  selectedRounds: Set<RoundType>
 ): Session[] {
   const startDate = dateRange !== null ? ALL_DATES[dateRange[0]] : null;
   const endDate = dateRange !== null ? ALL_DATES[dateRange[1]] : null;
@@ -34,14 +43,7 @@ export function filterSessions(
     if (startDate && endDate && (s.date < startDate || s.date > endDate))
       return false;
     if (selectedSports.size > 0 && !selectedSports.has(s.sport)) return false;
-
-    const isPrelim = !s.has_gold_medal && !s.has_bronze_medal;
-    const passesMedal =
-      (isPrelim && medalFilter.prelim) ||
-      (s.has_gold_medal && medalFilter.gold) ||
-      (s.has_bronze_medal && medalFilter.bronze);
-    if (!passesMedal) return false;
-
+    if (!selectedRounds.has(getRoundType(s.session_type))) return false;
     return true;
   });
 }
